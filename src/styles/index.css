@@ -1,0 +1,427 @@
+@import "tailwindcss";
+
+/* ───────────────────────── Design tokens ───────────────────────── */
+@theme {
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat Variable", "Caveat", "Segoe Print", cursive;
+
+  --color-blush-50: #fff6f9;
+  --color-blush-100: #ffe8ef;
+  --color-blush-200: #ffd3e0;
+  --color-blush-300: #ffb3c9;
+  --color-blush-400: #ff8fb0;
+  --color-blush-500: #f2678f;
+  --color-blush-600: #d94a75;
+  --color-blush-700: #b23661;
+
+  --color-cloud-50: #f3f9ff;
+  --color-cloud-100: #e2f1fd;
+  --color-cloud-200: #c4e3fb;
+  --color-cloud-300: #9dd0f6;
+  --color-cloud-400: #6db6ec;
+  --color-cloud-500: #4a9fdf;
+  --color-cloud-600: #2f7fbf;
+
+  --color-lilac-100: #f1ebff;
+  --color-lilac-200: #e1d5fc;
+  --color-lilac-300: #c8b6f6;
+  --color-lilac-500: #9a7ee6;
+
+  --color-ink: #2b1d2f;
+  --color-ink-soft: #5d4b61;
+  --color-ink-mute: #8b7a8f;
+  --color-paper: #fffdf8;
+  --color-paper-2: #fbf5ea;
+  --color-night: #1c1427;
+  --color-night-2: #2b1e3b;
+  --color-mint: #46b98a;
+  --color-alert: #e5484d;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-paper: cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-drift: drift 60s linear infinite;
+  --animate-twinkle: twinkle 3.2s ease-in-out infinite;
+  --animate-beat: beat 1.4s ease-in-out infinite;
+  --animate-wiggle: wiggle 2.6s ease-in-out infinite;
+  --animate-rise: rise 9s linear infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-blink: blink 4.6s ease-in-out infinite;
+  --animate-bob: bob 2.4s ease-in-out infinite;
+
+}
+
+/* ───────────────────────── Keyframes ───────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--r, 0deg)); }
+  50% { transform: translate3d(0, -14px, 0) rotate(calc(var(--r, 0deg) + 3deg)); }
+}
+@keyframes drift {
+  from { transform: translate3d(-30vw, 0, 0); }
+  to { transform: translate3d(130vw, 0, 0); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(20deg); }
+}
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.16); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+  70% { transform: scale(1); }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(var(--r, 0deg)); }
+  25% { transform: rotate(calc(var(--r, 0deg) - 4deg)); }
+  75% { transform: rotate(calc(var(--r, 0deg) + 4deg)); }
+}
+@keyframes rise {
+  0% { transform: translate3d(0, 0, 0) scale(var(--s, 1)); opacity: 0; }
+  10% { opacity: var(--o, 0.7); }
+  85% { opacity: var(--o, 0.7); }
+  100% { transform: translate3d(var(--dx, 20px), -110vh, 0) scale(var(--s, 1)); opacity: 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes rec {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+@layer base {
+  html {
+    background: var(--color-blush-50);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-blush-50);
+    min-height: 100%;
+  }
+  ::selection {
+    background: var(--color-blush-300);
+    color: var(--color-ink);
+  }
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  button {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-cloud-400);
+    outline-offset: 3px;
+    border-radius: 10px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Scroll lock while the opening scene is playing */
+html.is-locked,
+html.is-locked body {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Custom cursor: only hide the native one when ours is active (fine pointers) */
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ───────────────────────── Textures & surfaces ───────────────────────── */
+@layer components {
+  .grain {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.4  0 0 0 0 0.3  0 0 0 0 0.35  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .paper {
+    background-color: var(--color-paper);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255, 211, 224, 0.18), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(196, 227, 251, 0.2), transparent 45%);
+  }
+
+  .ruled {
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(to right, transparent 54px, rgba(242, 103, 143, 0.45) 54px, rgba(242, 103, 143, 0.45) 56px, transparent 56px),
+      repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(109, 182, 236, 0.28) 35px, rgba(109, 182, 236, 0.28) 36px);
+    background-position: 0 18px;
+  }
+
+  .grid-paper {
+    background-color: #fffefb;
+    background-image:
+      linear-gradient(rgba(109, 182, 236, 0.16) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(109, 182, 236, 0.16) 1px, transparent 1px);
+    background-size: 26px 26px;
+  }
+
+  .dots-bg {
+    background-image: radial-gradient(rgba(242, 103, 143, 0.18) 1.2px, transparent 1.2px);
+    background-size: 22px 22px;
+  }
+
+  .tape {
+    position: absolute;
+    width: 92px;
+    height: 26px;
+    background:
+      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0 6px, transparent 6px 12px),
+      var(--tape, rgba(255, 179, 201, 0.75));
+    box-shadow: 0 1px 2px rgba(43, 29, 47, 0.12);
+    clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 4% 96%, 0 52%);
+    z-index: 3;
+  }
+
+  .polaroid {
+    background: #fff;
+    padding: 10px 10px 44px;
+    box-shadow:
+      0 1px 1px rgba(43, 29, 47, 0.06),
+      0 10px 24px -8px rgba(43, 29, 47, 0.25),
+      0 24px 50px -24px rgba(178, 54, 97, 0.25);
+  }
+
+  .soft-card {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(255, 179, 201, 0.5);
+    box-shadow: 0 20px 60px -30px rgba(178, 54, 97, 0.35), 0 2px 6px rgba(43, 29, 47, 0.05);
+    backdrop-filter: blur(6px);
+  }
+
+  .sticker {
+    filter: drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+      drop-shadow(0 6px 10px rgba(43, 29, 47, 0.18));
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 100, "WONK" 0;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 24px rgba(255, 143, 176, 0.65), 0 0 60px rgba(255, 143, 176, 0.35);
+  }
+
+  .bubble {
+    position: relative;
+    background: #fff;
+    border: 2.5px solid var(--color-ink);
+    border-radius: 18px;
+    padding: 0.55rem 0.85rem;
+    font-family: var(--font-hand);
+    font-weight: 700;
+    line-height: 1.05;
+    box-shadow: 3px 3px 0 var(--color-ink);
+  }
+
+  .btn-primary {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    padding: 1rem 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--color-blush-400), var(--color-blush-500) 55%, var(--color-blush-600));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      0 10px 30px -10px rgba(217, 74, 117, 0.75),
+      0 2px 0 rgba(178, 54, 97, 0.35);
+    transition: box-shadow 0.3s var(--ease-soft), filter 0.3s;
+  }
+  .btn-primary:hover {
+    filter: saturate(1.1) brightness(1.03);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 16px 40px -10px rgba(217, 74, 117, 0.85),
+      0 2px 0 rgba(178, 54, 97, 0.35);
+  }
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.8rem 1.35rem;
+    font-weight: 700;
+    color: var(--color-ink);
+    background: #fff;
+    border: 1.5px solid rgba(43, 29, 47, 0.12);
+    box-shadow: 0 6px 18px -10px rgba(43, 29, 47, 0.35);
+    transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease-bounce);
+  }
+  .btn-ghost:hover {
+    background: var(--color-blush-50);
+    border-color: var(--color-blush-300);
+  }
+  .btn-ghost:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ───────────────────────── Motion primitives ───────────────────────── */
+
+/* Hand-drawn doodles: paths use pathLength=1, revealed when the parent gets .is-drawn */
+.draw path,
+.draw line,
+.draw circle,
+.draw polyline {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.4s var(--ease-soft);
+  transition-delay: var(--d, 0s);
+}
+.is-drawn .draw path,
+.is-drawn .draw line,
+.is-drawn .draw circle,
+.is-drawn .draw polyline,
+.draw.is-drawn path,
+.draw.is-drawn line,
+.draw.is-drawn circle,
+.draw.is-drawn polyline {
+  stroke-dashoffset: 0;
+}
+
+/* Character parts */
+.kid-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 4.6s ease-in-out infinite;
+  animation-delay: var(--blink-delay, 0s);
+}
+
+/* Pause decorative loops when their section is off-screen */
+[data-active="false"] .ambient,
+[data-active="false"] .ambient *,
+[data-active="false"] .kid-eyes,
+[data-active="false"] .loop {
+  animation-play-state: paused !important;
+}
+
+/* Book */
+.book-leaf {
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition:
+    transform 1.15s var(--ease-paper),
+    z-index 0s linear 0.57s;
+}
+.book-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.book-face.back {
+  transform: rotateY(180deg);
+}
+
+/* Utility: hide scrollbars on horizontal galleries */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ───────────────────────── Reduced motion ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .draw path,
+  .draw line,
+  .draw circle,
+  .draw polyline {
+    stroke-dashoffset: 0;
+  }
+}
